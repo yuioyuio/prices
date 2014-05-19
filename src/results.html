@@ -1,0 +1,94 @@
+<html>
+<head>
+	<title>Prices</title>
+	<link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+	
+	<!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+
+      // Load the Visualization API and the piechart package.
+      google.load('visualization', '1.0', {'packages':['corechart']});
+
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.setOnLoadCallback(drawChart);
+
+      // Callback that creates and populates a data table,
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+      function drawChart( url )
+      {
+    	  
+    	var data_from_django = {{ values1|safe }};
+    	
+		// Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('date', 'Time');
+        data.addColumn('number', 'Price');
+        
+        var rows = [];
+        for( var url in data_from_django )
+        {
+        	var item = data_from_django[ url ];
+        	for( var price in item )
+        	{
+        		if( item.hasOwnProperty( price ) )
+            	{
+        			var d = item[ price ];
+        			console.log( d );
+                	var list = [ new Date( d[1] ), d[0] ]//.1, price.0 ];
+                	rows.push( list );
+                }
+        	}
+        }
+        data.addRows( rows );
+
+        // Set chart options
+        var options = {'title':'How Much Pizza I Ate Last Night',
+                       'width':800,
+                       'height':500};
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'+url));
+        chart.draw(data, options);
+      }
+    </script>
+	
+</head>
+<body>
+	<div>
+	{% for data in values2.items %}
+		<div class="target">
+			<div class="url">
+				<a href="{{ data.0 }}">{{ data.0 }}</a>
+				Current: {{ last.0 }} {{ last.1 }}
+				Low: {{ low }}
+				High: {{ high }}
+			</div>
+			<!-- {% for price in data.1 %}
+				<div class="price_entry">
+					<div class="price">
+						{{ price.0 }}
+					</div>
+					<div class="timestamp">
+						<script type="text/javascript">
+							new Date( {{ price.1 }} )
+						</script>
+					</div>
+				</div>
+			{% endfor %} -->
+			<div id="chart_div{{ data.0 }}"></div>
+			<div>
+			<input type="button" value="chart" onclick="drawChart( '{{ data.0 }}' );"/>
+			</div>
+		</div>
+	{% endfor %}
+	</div>
+	
+	<div>
+	<input type="button" value="hello" onclick="drawChart();"/>
+	</div>
+	<div id="chart_div"></div>
+	
+</body>
+</html>
