@@ -92,7 +92,7 @@ class Results(webapp.RequestHandler):
                 data = ( price.price, time.mktime( price.timestamp.timetuple() ) * 1000 )
                 values.setdefault( target.url.url, [] ).append( data )
         
-        lastprice = ( price.price, time.mktime( price.timestamp.timetuple() ) * 1000 )
+        lastprice = ( price.price, price.timestamp.strftime('%H:%M - %d %b %Y') )
         lowprice = min( prices )
         highprice = max( prices )
         

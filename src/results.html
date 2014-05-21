@@ -61,9 +61,9 @@
 		<div class="target">
 			<div class="url">
 				<a href="{{ data.0 }}">{{ data.0 }}</a>
-				Current: {{ last.0 }} {{ last.1 }}
-				Low: {{ low }}
-				High: {{ high }}
+				<div>Current: {{ last.0 }} @ {{ last.1 }}</div>
+				<div>Low: {{ low }}</div>
+				<div>High: {{ high }}</div>
 			</div>
 			<!-- {% for price in data.1 %}
 				<div class="price_entry">
